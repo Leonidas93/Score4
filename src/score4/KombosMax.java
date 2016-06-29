@@ -18,6 +18,76 @@ public class KombosMax {
             }
         }
         setPosition(x);
+        if(final_State!=1)
+        {
+            setChildren(pointer);
+        }
+        if(final_State==0)
+        {
+            Heuristic h=new Heuristic();
+            h.evaluate(array);
+            points=h.maxps-h.minps;
+            
+        }
+        else if(final_State==2)
+        {
+            points=find_best_move();
+        }
+        else if(final_State==1)
+        {
+            points=100000;
+        }
+    }
+    
+    public int find_best_move()//tsekarei na brei thn kaluterh lush antoistixa kai ston min
+    {
+        int i;
+        int min=0;
+        for(i=0;i<7;i++)
+        {
+            if(children[i]!=null)
+            {
+                min=children[i].points;
+                break;
+            }
+        }
+        for(int j=0;j<7;j++)
+        {
+            if(children[j]!=null)
+            {
+                if(children[j].points<min)
+                {
+                    min=children[j].points;
+                }
+            }
+        }
+        
+        return min;
+    }
+    
+    public void setChildren(int x)//dhmiourgei ta paidia. gia na dhmiourgh8ei to epomeno 8a prepei na exei dhmirghsei t proto kai ola ta paidia tou
+    {
+        if(x==0)
+        {
+            final_State=0;
+            return;
+        }
+        //boolean firstchild=false;
+        
+        int counter=0;
+        for(int i=0;i<7;i++)
+        {
+            if(!isfull(i))
+            {   
+            	children[i]=new KombosMin(array,i,x-1);
+            }
+            else counter++;
+        }
+        
+        if(counter==7)
+        {
+            final_State=0;
+        }
     }
     
     public boolean isfull(int i)//tsekarei an einai gemath h sthlh antistoixa kai ston min
